@@ -1,43 +1,57 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { FlatList, View, Text, Image } from 'react-native';
+import { FlatList, View, Text, Image, StyleSheet } from 'react-native';
 import {getFilteredMenuItems} from '../utils/MenuData';
 import { SettingsContext } from '../utils/MenuProvider';
 
+const styles = StyleSheet.create({
+  container: { margin: 10, backgroundColor: '#FFF' },
+  title: { fontSize: 24, fontWeight: 'bold' },
+  row: { flexDirection: 'row', justifyContent: 'space-between', borderWidth: 0, marginTop: 5 },
+  description: { flex: 0.8, margin: 5, fontSize: 14 },
+  price: { fontSize: 14, fontWeight: 'bold', alignSelf: 'flex-start' },
+  image: { flex: 0.4, width: 100, height: 100 },
+  separator: { borderColor: '#DDDDDD', borderBottomWidth: 1 }
+});
+
 const MenuList = () => {
   const { settings, updateSetting } = useContext(SettingsContext);
-  
   const [menuData, setMenuData] = useState([]);
 
   useEffect(() => {
     getFilteredMenuItems(settings.selectedCategories, "")
-      .then(data => setMenuData(data));
-      
-  }, []);
+      .then(data => {
+        setMenuData(data);
+        
+      });
+  }, []); 
 
   useEffect(() => {
-    getFilteredMenuItems(settings.selectedCategories, "")
+    getFilteredMenuItems(settings.selectedCategories, settings.searchText)
       .then(data => setMenuData(data));
       console.log("MenuData: " + JSON.stringify(menuData));
   }, [settings.selectedCategories]);
   
-  const dummyData = [
-    { id: '1', name: 'Greek Salad', description: 'The famous greek salad of crispy lettuce', price: '12.99', image: 'images/Bruschetta.png' },
-    { id: '2', name: 'Item 2', description: 'Description 2', price: '12.99', image: 'images/Bruschetta.png' },
-    { id: '3', name: 'Item 3', description: 'Description 3', price: '12.99', image: 'images/Bruschetta.png' },
-  ];
+  useEffect(() => {
+    getFilteredMenuItems(settings.selectedCategories, settings.searchText)
+      .then(data => setMenuData(data));
+      console.log("MenuData: " + JSON.stringify(menuData));
+  }, [settings.searchText]);
+
 
   const renderItem = ({ item }) => (
-    <View style={{ margin: 10, backgroundColor: '#FFF' }}>
+    <View style={styles.container}>
         
-    <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{item.name}</Text>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderWidth: 0, marginTop: 5 }}>
-      <View style={{ flex: 0.8, margin: 5 }}>        
-        <Text style={{ fontSize: 14 }}>{item.description}</Text>
+    <Text style={styles.title}>{item.name}</Text>
+    <View style={styles.row}>
+      <View style={styles.description}>        
+        <Text style={styles.description}>{item.description}</Text>
         <View style={{ flex: 1 }}></View>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', alignSelf: 'flex-start' }}>${item.price}</Text>
+        <Text style={styles.price}>${item.price}</Text>
       </View>
-      <View style={{ flex: 0.4 }}>
-        <Image source={require("../images/Bruschetta.png") } style={{ width: 100, height: 100 }} />
+      <View style={styles.image}>
+        {item.name === "Lemon Dessert" && <Image source={require('../images/Lemon_dessert.png')} style={styles.image} />}
+        {item.name === "Grilled Fish" && <Image source={require('../images/Grilled_fish.png')} style={styles.image} />}
+        {item.name !== "Lemon Dessert" && item.name !== "Grilled Fish" && <Image source={{uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${item.image}?raw=true`}} style={styles.image} />}
       </View>
     </View>
     
@@ -46,7 +60,7 @@ const MenuList = () => {
 
   return (
     <FlatList
-      ItemSeparatorComponent={() => <View style={{ borderColor: '#DDDDDD', borderBottomWidth: 1 }} />}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
       data={menuData}
       renderItem={renderItem}
       keyExtractor={item => item.id}

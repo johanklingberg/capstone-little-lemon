@@ -7,7 +7,8 @@ export const SettingsContext = React.createContext();
 export function MenuProvider(props) {
     const [settings, setSettings] = React.useState({
         selectedCategories: [],
-        menuitems:[]
+        menuitems:[],
+        searchText: ''
       });
 
       const updateSetting = (key, value) => {        

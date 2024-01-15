@@ -22,7 +22,7 @@ export default function Onboarding() {
   return (
     <View style={styles.container}>
       <Image
-        style={{flex: 1, width: 300, height: 100, resizeMode: 'contain'}}
+        style={styles.logo}
         source={require('../images/Logo.png')}
       />
       <TextInput
@@ -49,7 +49,7 @@ export default function Onboarding() {
         }}
         disabled={isButtonDisabled}
       >
-        <Text style={{textAlign: 'center'}}>Next</Text>
+        <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,6 +64,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     marginBottom: 20,
+  },
+  logo: {
+    flex: 1, 
+    width: 300, 
+    height: 100, 
+    resizeMode: 'contain'
   },
   input: {
     height: 40,
@@ -82,5 +88,8 @@ const styles = StyleSheet.create({
     margin: 4,
     cursor: 'pointer',
     borderRadius: 10, // Added to make the corners rounded
+  },
+  buttonText: {
+    textAlign: 'center'
   },
 });

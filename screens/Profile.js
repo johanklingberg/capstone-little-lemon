@@ -66,17 +66,17 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Personal information</Text>
-      <Text style={{fontSize: 12}}>Avatar</Text>
+      <Text style={styles.avatarText}>Avatar</Text>
       <View style={styles.profilePicContainer}>
         {image ? 
           <Image style={styles.profilePic} source={{ uri: image }} /> :
-          <View style={{...styles.profilePic, backgroundColor: '#495E57', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'white', fontSize: 20}}>
+          <View style={styles.profilePicPlaceholder}>
+            <Text style={styles.placeholderText}>
               {firstName[0]?.toUpperCase()}{lastName[0]?.toUpperCase()}
             </Text>
           </View>
         }
-        <View style={{width: 20}}></View>
+        <View style={styles.spacingView}></View>
         <TouchableOpacity style={styles.changeButton} onPress={pickImage}><Text style={styles.changeButtonText}>Change</Text></TouchableOpacity>
         <TouchableOpacity style={styles.removeButton} onPress={removeImage}><Text>Remove</Text></TouchableOpacity>
       </View>
@@ -94,30 +94,30 @@ export default function Profile() {
         onChangeText={(text, rawText) => {
           setPhoneNumber(text);
         }}
-        style={{...styles.inputRounded, borderWidth: 1, borderColor: 'black', height: 40, alignSelf: 'stretch'}}
+        style={styles.maskedInput}
       />
       <Text style={styles.header}>Email notifications</Text>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <Image style={{ width: 20, height: 20, marginRight: 10 }} source={require('../images/checkbox.png')} />
+      <View style={styles.checkboxContainer}>
+        <Image style={styles.checkboxImage} source={require('../images/checkbox.png')} />
         <Text>Order statuses</Text>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <Image style={{ width: 20, height: 20, marginRight: 10 }} source={require('../images/checkbox.png')} />
+      <View style={styles.checkboxContainer}>
+        <Image style={styles.checkboxImage} source={require('../images/checkbox.png')} />
         <Text>Password changes</Text>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <Image style={{ width: 20, height: 20, marginRight: 10 }} source={require('../images/checkbox.png')} />
+      <View style={styles.checkboxContainer}>
+        <Image style={styles.checkboxImage} source={require('../images/checkbox.png')} />
         <Text>Special offers</Text>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <Image style={{ width: 20, height: 20, marginRight: 10 }} source={require('../images/checkbox.png')} />
+      <View style={styles.checkboxContainer}>
+        <Image style={styles.checkboxImage} source={require('../images/checkbox.png')} />
         <Text>Newsletter</Text>
       </View>
       
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}><Text>Logout</Text></TouchableOpacity>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>        
-        <TouchableOpacity style={{...styles.removeButton, marginLeft: 40}}><Text>Discard changes</Text></TouchableOpacity>
-        <TouchableOpacity onPress={saveChanges} style={{...styles.changeButton, marginRight: 40}}><Text style={styles.changeButtonText}>Save changes</Text></TouchableOpacity>
+      <View style={styles.buttonContainer}>        
+        <TouchableOpacity style={styles.discardButton}><Text>Discard changes</Text></TouchableOpacity>
+        <TouchableOpacity onPress={saveChanges} style={styles.saveButton}><Text style={styles.changeButtonText}>Save changes</Text></TouchableOpacity>
       </View>
     </View>
   );
@@ -137,6 +137,9 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginBottom: 10,
   },
+  avatarText: {
+    fontSize: 12,
+  },
   profilePicContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,6 +151,19 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
   },
+  profilePicPlaceholder: {
+    ...styles.profilePic,
+    backgroundColor: '#495E57',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  placeholderText: {
+    color: 'white',
+    fontSize: 20
+  },
+  spacingView: {
+    width: 20
+  },
   inputRounded: {
     height: 40,
     borderColor: 'gray',
@@ -155,6 +171,13 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginBottom: 10,
     borderRadius: 5,
+  },
+  maskedInput: {
+    ...styles.inputRounded,
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 40,
+    alignSelf: 'stretch'
   },
   changeButton: {
     backgroundColor: '#495E57',
@@ -182,9 +205,25 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  label: {
-    margin: 8,
+  checkboxImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%'
+  },
+  discardButton: {
+    ...styles.removeButton,
+    marginLeft: 40
+  },
+  saveButton: {
+    ...styles.changeButton,
+    marginRight: 40
   },
 });

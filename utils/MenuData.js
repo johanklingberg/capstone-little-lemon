@@ -21,7 +21,7 @@ export const writeMenuItems = (items) => {
         tx.executeSql(
           `DROP TABLE IF EXISTS menuitem;`
         );
-      });
+      }); 
 
       db.transaction(tx => {
         tx.executeSql(
@@ -31,7 +31,7 @@ export const writeMenuItems = (items) => {
             description TEXT,
             name TEXT,
             price REAL,
-            image BLOB
+            image TEXT
           );`
         );
         console.log("Created table");   
@@ -42,7 +42,7 @@ export const writeMenuItems = (items) => {
               [item.category, item.description, item.name, item.price, item.image]
             );
             console.log("Insert complete: " + item.name);
-          });
+          });   
         
       }, (error) => {
         console.log('Transaction Error: ', error);
@@ -59,35 +59,7 @@ export const writeMenuItems = (items) => {
   });
 };
 
-// console.log("hej");
-// try {
-//   let items = [];
-//   await db.transaction(async tx => {
-//     await tx.executeSql(
-//       `SELECT * FROM menuitem;`,
-//       [],
-//       (_, result) => {
-//         for (let i = 0; i < result.rows.length; i++) {
-//             //console.log("row: " + result.rows.item(i).name);
-//           items.push();
-//           let item = {
-//             id: result.rows.item(i).id,
-//             name: result.rows.item(i).name,
-//             description: result.rows.item(i).description,
-//             price: result.rows.item(i).price,
-//             image: result.rows.item(i).image
-//           };
-//           items.push(item);
-//           console.log (items[0] +  item)
-//         }
-//       }
-//     );
-//   });
-//   console.log("Returning search results from DB:" + items.length);
-//   return items;
-// } catch (error) {
-//   console.error('Database Error: ', error);
-// }
+
 
 export const getFilteredMenuItems = (selectedCategories, searchString) => {
   console.log ("fil" + JSON.stringify(selectedCategories));
@@ -103,12 +75,24 @@ const getFilteredItems = (selectedCategories, searchString) => {
       try {
           let items = [];
           db.transaction(tx => {
-              let query = selectedCategories && selectedCategories.length > 0 
-                          ? `SELECT * FROM menuitem WHERE category IN (${selectedCategories.map(() => '?').join(',')});`
-                          : `SELECT * FROM menuitem;`;
+              let query = `SELECT * FROM menuitem`;
+              let params = [];
+
+              if (selectedCategories && selectedCategories.length > 0) {
+                  query += ` WHERE category IN (${selectedCategories.map(() => '?').join(',')})`;
+                  params = [...selectedCategories];
+              }
+
+              if (searchString && searchString.trim() !== '') {
+                  query += `${params.length > 0 ? ' AND' : ' WHERE'} name LIKE ?`;
+                  params.push(`%${searchString}%`);
+              }
+
+              query += ';';
+
               tx.executeSql(
                   query,
-                  selectedCategories || [],
+                  params,
                   (_, result) => {
                       for (let i = 0; i < result.rows.length; i++) {
                           let item = result.rows.item(i);

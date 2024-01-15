@@ -27,12 +27,20 @@ function HeaderRightButton() {
     </TouchableOpacity>
   );
 }
+
+function LogoTitle() {
+  return (
+    <Image
+      style={{ width: 300, height: 50, resizeMode: 'contain', alignSelf: 'center' }}
+      source={require('./images/Logo.png')}
+    />
+  );
+}
   
   const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
 useEffect(() => {
@@ -55,6 +63,9 @@ if (isLoading) {
           screenOptions={{
             headerRight: () => (
               <HeaderRightButton />
+            ),
+            headerTitle: () => (
+              <LogoTitle />
             ),
           }}
         >
