@@ -1,12 +1,69 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import OnboardingScreen from './screens/Onboarding';
+import ProfileScreen from './screens/Profile';
+import HomeScreen from './screens/Home';
+import { isOnboardingCompleted } from './utils/State';
+import { LogBox } from 'react-native';
+import { MenuProvider } from './utils/MenuProvider';
+
+LogBox.ignoreLogs(['new NativeEventEmitter']);
+
+
+import { ActivityIndicator } from 'react-native';
+
+
+function HeaderRightButton() {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+      <Image
+        style={{ width: 30, height: 30, marginRight: 10 }}
+        source={require('./images/Profile.png')}
+      />
+    </TouchableOpacity>
+  );
+}
+  
+  const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+  (async () => {
+    console.log("H: " + await isOnboardingCompleted());
+    setOnboardingCompleted(await isOnboardingCompleted());
+    setIsLoading(false);
+  })();
+}, []);
+  
+if (isLoading) {
+  return <ActivityIndicator />; // Or some other loading indicator
+}
+
   return (
-    <View style={styles.container}>
-      <Text>Open2 up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <MenuProvider>
+        <Stack.Navigator 
+          initialRouteName={onboardingCompleted ? "Home" : "Welcome"}
+          screenOptions={{
+            headerRight: () => (
+              <HeaderRightButton />
+            ),
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Welcome" component={OnboardingScreen} options={{ headerRight: null }} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+        </Stack.Navigator>
+      </MenuProvider>
+    </NavigationContainer>
   );
 }
 
