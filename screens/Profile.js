@@ -152,10 +152,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   profilePicPlaceholder: {
-    ...styles.profilePic,
     backgroundColor: '#495E57',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   placeholderText: {
     color: 'white',
@@ -173,11 +175,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   maskedInput: {
-    ...styles.inputRounded,
     borderWidth: 1,
     borderColor: 'black',
     height: 40,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
+    borderRadius: 5,
+    marginBottom: 10,
   },
   changeButton: {
     backgroundColor: '#495E57',
@@ -219,11 +222,19 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   discardButton: {
-    ...styles.removeButton,
+    backgroundColor: '#EDEFEE',
+    borderColor: '#000',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    margin: 5,
     marginLeft: 40
   },
   saveButton: {
-    ...styles.changeButton,
+    backgroundColor: '#495E57',
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
     marginRight: 40
   },
 });
