@@ -25,12 +25,14 @@ export default function Onboarding() {
         style={styles.logo}
         source={require('../images/Logo.png')}
       />
+      <Text style={styles.header}>First Name</Text>
       <TextInput
         style={styles.input}
         placeholder="First Name"
         onChangeText={text => setFirstName(text.replace(/[^a-zA-Z]/g, ''))}
         defaultValue={firstName}
       />
+      <Text style={styles.header}>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
-    backgroundColor: '#4CAF50', /* Green */
+    backgroundColor: '#F4CE14', 
     borderColor: 'black',
     borderWidth: 1,
     padding: 15,
